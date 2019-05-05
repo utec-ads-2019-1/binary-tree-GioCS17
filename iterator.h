@@ -2,39 +2,71 @@
 #define ITERATOR_H
 
 #include "node.h"
+#include<stack>
 
 template <typename T> 
 class Iterator {
     private:
         Node<T> *current;
-
+	stack<Node<T>*> sfront;
+	stack<Node<T>*> sback;
     public:
         Iterator() {
-            // TODO
+		this->current=nullptr;
         }
 
+	void fillStackRecursive(Node<T>*node){
+		if(node->left)
+			fillStackRecursive(node->left);
+		sfront.push(node);
+		if(node->right)
+			fillStackRecursive(node->right);
+	}
         Iterator(Node<T> *node) {
-            // TODO
+		fillStackRecursive(node);
+		while(!sfront.empty()){
+			sback.push(sfront.top());
+			sfront.pop();
+		}
+		sfront.push(sback.top());
+		sback.pop();
+		this->current=sfront.top();
         }
 
-        Iterator<T> operator=(Iterator<T> other) {          
-            // TODO
+        Iterator<T> operator=(Iterator<T> other) {         
+		this->current=other->current;
         }
 
         bool operator!=(Iterator<T> other) {
-            // TODO
+		return this->current!=other.current;
         }
 
         Iterator<T> operator++() {
-            // TODO
+		if(sback.empty()){
+			this->current=nullptr;
+			return (*this);
+		}
+		sfront.push(sback.top());
+		sback.pop();
+		this->current=sfront.top();
+		return (*this);
         }
 
         Iterator<T> operator--() {
-            // TODO
+		if(sfront.empty()){
+			this->current=nullptr;
+			return (*this);
+		}
+		sback.push(sfront.top());
+		sfront.pop();
+		this->current=sback.top();
+		return (*this);
         }
 
         T operator*() {
-            // TODO
+		if(!this->current)
+			throw runtime_error("Valor de iterador es null\n");
+		return this->current->data;
         }
 };
 

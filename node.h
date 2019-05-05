@@ -13,6 +13,7 @@ class Node {
         T data;
         Node<T> *left;
         Node<T> *right;
+        Node<T> *parent;
 
     template<class>
     friend class BSTree; 

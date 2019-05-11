@@ -160,6 +160,7 @@ class BSTree {
 					tmp=tmp->right;
 			}
 		}
+		// Falta un return
         }
 
         unsigned int size() {
@@ -229,6 +230,7 @@ class BSTree {
         }
 
 	void deleteall(Node<T>* node){
+		// Si node es null? 
 		if(node->left)
 			deleteall(node->left);
 		if(node->right)
